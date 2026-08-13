@@ -1,0 +1,20 @@
+---
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/cv', label: 'CV' },
+];
+---
+
+<header class="site-header">
+  <nav>
+    <a class="brand" href="/">Diogo Nunes</a>
+    <div class="links">
+      {links.map((link) => (
+        <a href={link.href}>{link.label}</a>
+      ))}
+    </div>
+  </nav>
+</header>

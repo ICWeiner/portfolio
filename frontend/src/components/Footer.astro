@@ -1,0 +1,21 @@
+---
+const year = new Date().getFullYear();
+const links = [
+  { href: 'https://github.com/diogonunes', label: 'GitHub' },
+  { href: 'https://www.linkedin.com/in/diogonunes', label: 'LinkedIn' },
+  { href: 'mailto:diogo@diogonunes.dev', label: 'Email' },
+];
+---
+
+<footer class="site-footer">
+  <div class="inner">
+    <span>© {year} Diogo Nunes</span>
+    <span class="links">
+      {links.map((link) => (
+        <a href={link.href} target="_blank" rel="noopener noreferrer">
+          {link.label}
+        </a>
+      ))}
+    </span>
+  </div>
+</footer>

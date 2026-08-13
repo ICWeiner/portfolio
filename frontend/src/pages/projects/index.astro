@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<BaseLayout
+  title="Projects"
+  description="Selected projects and the lessons learned building them."
+>
+  <h1>Projects</h1>
+  <p class="muted">Selected work, with architecture decisions and lessons learned.</p>
+
+  {projects.map((project) => (
+    <a class="card" style="display:block" href={`/projects/${project.id}`}>
+      <div class="meta">
+        <span>{project.data.date.toISOString().slice(0, 10)}</span>
+        <span class="tag">{project.data.status}</span>
+      </div>
+      <h3>{project.data.title}</h3>
+      <p>{project.data.summary}</p>
+      <div class="meta">
+        {project.data.stack.map((tech) => (
+          <span class="tag">{tech}</span>
+        ))}
+      </div>
+    </a>
+  ))}
+</BaseLayout>

@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Home">
+  <section class="hero">
+    <h1>Diogo Nunes</h1>
+    <p class="tagline">
+      Backend engineer who builds, deploys, operates, and documents the things he
+      ships — including the platform you are reading this on.
+    </p>
+    <p>
+      This site runs on a self-hosted homelab behind Traefik, is served from an
+      Astro static build, and talks to a Spring Boot API — all deployed
+      automatically from a single monorepo. The
+      <a href="/projects/portfolio-platform"> project page</a> and the
+      <a href="/blog/building-the-portfolio">blog post</a> explain how.
+    </p>
+    <p>
+      <a class="btn" href="/projects">See projects</a>
+      <a class="btn" href="/about" style="margin-left: 0.5rem">About me</a>
+    </p>
+  </section>
+</BaseLayout>

@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const skills = [
+  'Java',
+  'Spring Boot',
+  'TypeScript',
+  'Astro',
+  'Docker',
+  'Linux',
+  'Networking',
+  'CI/CD',
+  'Git',
+  'Self-hosting',
+  'Traefik',
+  'Markdown',
+];
+
+const timeline = [
+  {
+    period: 'Now',
+    role: 'Building this portfolio platform',
+    detail:
+      'Designing and operating the full stack — frontend, API, deployment pipeline, and infrastructure — in public, with decisions recorded as ADRs.',
+  },
+  {
+    period: 'Earlier',
+    role: 'Backend engineering',
+    detail:
+      'Java and Spring Boot focus, containerized and deployed through CI/CD pipelines.',
+  },
+];
+---
+
+<BaseLayout
+  title="About"
+  description="Professional summary, technical skills, and focus areas."
+>
+  <h1>About</h1>
+
+  <h2>Summary</h2>
+  <p>
+    I'm a backend engineer with a strong interest in the full lifecycle of
+    software — not just writing it, but deploying, operating, and documenting it.
+    I care about reproducible builds, honest architecture decisions, and
+    self-hosting my own stack to learn how production systems actually behave.
+  </p>
+
+  <h2>Skills</h2>
+  <ul class="skill-list">
+    {skills.map((skill) => (
+      <li>{skill}</li>
+    ))}
+  </ul>
+
+  <h2>Timeline</h2>
+  {timeline.map((entry) => (
+    <div class="card">
+      <div class="meta">{entry.period}</div>
+      <h3>{entry.role}</h3>
+      <p>{entry.detail}</p>
+    </div>
+  ))}
+
+  <h2>Focus areas</h2>
+  <ul>
+    <li>Production Java backends</li>
+    <li>Self-hosting and homelab operations</li>
+    <li>CI/CD and deployment pipelines</li>
+    <li>Documentation and architecture decisions</li>
+  </ul>
+</BaseLayout>

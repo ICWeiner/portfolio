@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="CV"
+  description="Curriculum vitae for Diogo Nunes — downloadable as a PDF."
+>
+  <h1>Curriculum Vitae</h1>
+  <p class="muted">
+    A downloadable PDF version is available below. This page is the online form.
+  </p>
+
+  <h2>Summary</h2>
+  <p>
+    Backend engineer focused on Java and Spring Boot, with hands-on experience
+    deploying and operating services on self-hosted infrastructure. Comfortable
+    across the whole stack: API design, containerization, CI/CD, networking, and
+    documentation.
+  </p>
+
+  <h2>Experience</h2>
+  <div class="card">
+    <div class="meta">Current</div>
+    <h3>Personal Portfolio Platform</h3>
+    <p>
+      Designed, built, and operated this platform end to end: Astro frontend,
+      Spring Boot API, Traefik, GitHub Actions, and a self-hosted Proxmox host.
+    </p>
+  </div>
+  <div class="card">
+    <div class="meta">Past</div>
+    <h3>Backend Engineering</h3>
+    <p>
+      Java and Spring Boot services, containerized and shipped through CI/CD
+      pipelines.
+    </p>
+  </div>
+
+  <h2>Skills</h2>
+  <ul>
+    <li>Java, Spring Boot, TypeScript</li>
+    <li>Docker, Linux, networking, Traefik</li>
+    <li>GitHub Actions, CI/CD, self-hosting</li>
+  </ul>
+
+  <h2>Download</h2>
+  <p>
+    <a class="btn" href="/cv.pdf">Download CV (PDF)</a>
+  </p>
+</BaseLayout>
