@@ -55,6 +55,10 @@ implemented in the repo. What remains is hands-on setup, in order:
 - [ ] Push to `main` and confirm the first automated deploy
 - [ ] Verify external HTTPS, `/api/v1/ping`, `/actuator/health`
 - [ ] Review firewall rules (only `80`/`443` exposed)
+- [ ] Replace the fixed `sleep 10` in the deploy job (`.github/workflows/deploy.yml`)
+      with a proper readiness wait — poll `/actuator/health` with retries/backoff
+      until `UP`, or use a compose `healthcheck` +
+      `depends_on.condition: service_healthy`
 
 VM/runner details: `infrastructure/README.md`.
 
