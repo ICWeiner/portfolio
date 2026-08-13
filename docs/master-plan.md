@@ -40,11 +40,23 @@ The platform, deployment, operation, maintenance, and documentation are the proj
 
 # Phase 1 - Domain & Infrastructure Foundation
 
-## Domain
+The compose stack, Traefik config, and deployment pipeline are already
+implemented in the repo. What remains is hands-on setup, in order:
 
-- [ ] Purchase personal domain
-- [ ] Configure DNS records
-- [ ] Configure subdomain strategy
+## Next Steps (ordered)
+
+- [ ] Push the repository to GitHub
+- [ ] Purchase the domain (e.g. `diogonunes.dev`)
+- [ ] Create the VM on Proxmox (Debian 12) — the "Portfolio Host"
+- [ ] Install Docker Engine on the VM
+- [ ] Register the self-hosted GitHub Actions runner
+- [ ] Set up `/opt/portfolio/infrastructure` with a real `.env` (DOMAIN, ACME_EMAIL)
+- [ ] Point DNS: apex / `www` → VM, `api` → VM
+- [ ] Push to `main` and confirm the first automated deploy
+- [ ] Verify external HTTPS, `/api/v1/ping`, `/actuator/health`
+- [ ] Review firewall rules (only `80`/`443` exposed)
+
+VM/runner details: `infrastructure/README.md`.
 
 ### Proposed Structure
 
@@ -59,24 +71,11 @@ status.diogonunes.dev
 
 ---
 
-## Network & Hosting
-
-- [ ] Create dedicated portfolio service
-- [ ] Deploy on Proxmox
-- [ ] Configure Traefik reverse proxy
-- [ ] Configure Let's Encrypt certificates
-- [ ] Configure HTTPS redirects
-- [ ] Verify external accessibility
-- [ ] Review firewall rules
-- [ ] Document exposure decisions
-
----
-
 ## Documentation
 
-- [ ] Create infrastructure diagram
+- [x] Create infrastructure diagram   (architecture.md)
+- [x] Document deployment flow         (architecture.md §6, infrastructure/README.md)
 - [ ] Create network diagram
-- [ ] Document deployment flow
 
 ---
 
@@ -114,30 +113,31 @@ portfolio-infrastructure
 
 ## Frontend Pipeline
 
-- [ ] Automatic build on push
-- [ ] Deployment automation
-- [ ] Build validation
+- [x] Automatic build on push
+- [x] Deployment automation
+- [x] Build validation
 
 ---
 
 ## Backend Pipeline
 
-- [ ] Automatic build
-- [ ] Unit tests
-- [ ] Container image build
-- [ ] Deployment automation
+- [x] Automatic build
+- [x] Unit tests
+- [x] Container image build
+- [x] Deployment automation
 
 ---
 
 ## Secrets Management
 
-- [ ] No secrets committed
-- [ ] Deployment credentials protected
-- [ ] Document secret handling
+- [x] No secrets committed
+- [x] Deployment credentials protected
+- [x] Document secret handling
 
 Deployment model: GitHub-hosted runners build and test; a self-hosted runner on
 the VM pulls the images and runs `docker compose up -d`. Only `80`/`443` are
-exposed on the VM.
+exposed on the VM. Implemented in `.github/workflows/deploy.yml` (ADR-005,
+ADR-007).
 
 ---
 
@@ -145,37 +145,37 @@ exposed on the VM.
 
 ## Core Website
 
-- [ ] Landing page
-- [ ] Responsive layout
-- [ ] Navigation
-- [ ] Footer
-- [ ] Contact links
+- [x] Landing page
+- [x] Responsive layout
+- [x] Navigation
+- [x] Footer
+- [x] Contact links
 
 ---
 
 ## About Page
 
-- [ ] Professional summary
-- [ ] Career timeline
-- [ ] Technical skills
-- [ ] Interests and focus areas
+- [x] Professional summary
+- [x] Career timeline
+- [x] Technical skills
+- [x] Interests and focus areas
 
 ---
 
 ## CV Page
 
-- [ ] Online CV
-- [ ] Downloadable PDF
+- [x] Online CV
+- [x] Downloadable PDF  (placeholder until the real CV is added)
 
 ---
 
 ## Projects Section
 
-- [ ] Project listing page
-- [ ] Individual project pages
+- [x] Project listing page
+- [x] Individual project pages
 - [ ] Screenshots
 - [ ] Architecture diagrams
-- [ ] Lessons learned
+- [x] Lessons learned
 
 ---
 
@@ -183,15 +183,15 @@ exposed on the VM.
 
 ## Foundation
 
-- [ ] Create Spring Boot application
-- [ ] Containerize application
-- [ ] Health endpoint
+- [x] Create Spring Boot application
+- [x] Containerize application
+- [x] Health endpoint
 
 ---
 
 ## API Design
 
-- [ ] API versioning strategy
+- [x] API versioning strategy
 
 Example:
 
@@ -199,25 +199,25 @@ Example:
 /api/v1
 ```
 
-- [ ] DTO layer
-- [ ] Request validation
+- [x] DTO layer
+- [ ] Request validation  (n/a for MVP — no request bodies yet)
 - [ ] OpenAPI documentation
 
 ---
 
 ## Security
 
-- [ ] Security model defined
-- [ ] Public endpoints identified
-- [ ] Internal endpoints protected
+- [ ] Security model defined  (MVP is fully public; revisit if an admin area lands)
+- [x] Public endpoints identified
+- [ ] Internal endpoints protected  (n/a for MVP — no internal endpoints)
 
 ---
 
 ## Production Readiness
 
-- [ ] Structured logging
-- [ ] Error handling strategy
-- [ ] Configuration management
+- [x] Structured logging  (logstash JSON in `prod` profile)
+- [ ] Error handling strategy  (default for now; custom handlers later)
+- [x] Configuration management  (profiles + env vars)
 
 ---
 
@@ -259,9 +259,9 @@ Only expose information safe for public viewing.
 
 ## Blogging System
 
-- [ ] Markdown posts
+- [x] Markdown posts  (Astro content collections)
 - [ ] Categories
-- [ ] Tags
+- [x] Tags
 - [ ] RSS feed
 
 ---
@@ -272,7 +272,7 @@ Only expose information safe for public viewing.
 - [ ] Migrating to OPNsense
 - [ ] Self-Hosting Lessons Learned
 - [ ] Running Local LLMs
-- [ ] Building This Portfolio Platform
+- [x] Building This Portfolio Platform
 
 ---
 

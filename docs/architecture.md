@@ -94,9 +94,10 @@ flowchart LR
 
 ### 4.2 Backend — Spring Boot
 
-- Java 21 Spring Boot application, containerized.
+- Java 21, Spring Boot 4.0.x, containerized (see ADR-002).
 - Endpoints:
-  - `GET /actuator/health` — used by Traefik for health checks and routing.
+  - `GET /actuator/health` — used by Traefik for health checks and routing;
+    liveness/readiness probes enabled.
   - `GET /api/v1/ping` — demo endpoint returning application info.
 - Response shape (foundation for deploy verification):
 
@@ -203,6 +204,9 @@ flowchart LR
   Registry), so every deploy is traceable to a commit.
 - The deploy job runs on the self-hosted runner: `docker compose pull`, then
   `docker compose up -d`, followed by a health check against the API.
+- The stack runs from `/opt/portfolio/infrastructure` on the VM. Config lives in
+  the repo and is synced on every deploy; `.env` and `traefik/certificates/`
+  persist on the VM and are never in the repository (ADR-005, ADR-007).
 - Secrets (GHCR credentials, runner registration token, environment config)
   come from GitHub Actions secrets, never the repository.
 

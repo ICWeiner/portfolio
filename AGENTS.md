@@ -72,3 +72,16 @@ docker build -t portfolio-backend .   # build the JRE image
 
 The `prod` profile enables structured JSON logging
 (`logging.structured.format.console: logstash`).
+
+### Infrastructure (`infrastructure/`)
+
+Docker Compose stack (Traefik + frontend + backend). Validate config locally:
+
+```bash
+cp .env.example .env          # .env is gitignored; fill real values
+docker compose config         # validate interpolation
+docker compose pull && docker compose up -d
+```
+
+On the VM, deploy runs from `/opt/portfolio/infrastructure` via the self-hosted
+runner. `.env` and `traefik/certificates/` live on the VM and are gitignored.
