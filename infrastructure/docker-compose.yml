@@ -1,0 +1,46 @@
+services:
+  traefik:
+    image: traefik:v3.7
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
+      - ./traefik/certificates:/etc/traefik/certificates
+    networks:
+      - edge
+
+  frontend:
+    image: ghcr.io/diogonunes/portfolio-frontend:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    networks:
+      - edge
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)
+      - traefik.http.routers.frontend.entrypoints=websecure
+      - traefik.http.routers.frontend.tls=true
+      - traefik.http.routers.frontend.tls.certresolver=letsencrypt
+      - traefik.http.routers.frontend.middlewares=security-headers
+
+  backend:
+    image: ghcr.io/diogonunes/portfolio-backend:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    networks:
+      - edge
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backend.rule=Host(`api.${DOMAIN}`)
+      - traefik.http.routers.backend.entrypoints=websecure
+      - traefik.http.routers.backend.tls=true
+      - traefik.http.routers.backend.tls.certresolver=letsencrypt
+      - traefik.http.routers.backend.middlewares=security-headers
+      - traefik.http.services.backend.loadbalancer.healthcheck.path=/actuator/health
+      - traefik.http.services.backend.loadbalancer.healthcheck.interval=30s
+
+networks:
+  edge:
+    name: portfolio-edge
