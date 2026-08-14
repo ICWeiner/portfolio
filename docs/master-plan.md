@@ -45,7 +45,7 @@ implemented in the repo. What remains is hands-on setup, in order:
 
 ## Next Steps (ordered)
 
-- [ ] Push the repository to GitHub
+- [x] Push the repository to GitHub
 - [ ] Purchase the domain (e.g. `diogonunes.dev`)
 - [ ] Create the VM on Proxmox (Debian 12) — the "Portfolio Host"
 - [ ] Install Docker Engine on the VM
@@ -89,7 +89,9 @@ status.diogonunes.dev
 
 - Monorepo (ADR-004 context / architecture.md)
 - GitHub Actions with a self-hosted runner on the VM (ADR-005)
-- GHCR as the container registry
+- GHCR as the container registry (ADR-007)
+- Branch model: protected `main` + `develop` (ADR-008)
+- Release versioning with CI auto-bump (ADR-009)
 
 ## Repository Strategy
 
@@ -112,6 +114,18 @@ portfolio-frontend
 portfolio-api
 portfolio-infrastructure
 ```
+
+---
+
+## Branching & Versioning
+
+- [x] Branch model decided: `main` (release) + `develop` (integration) (ADR-008)
+- [ ] Branch protection configured on `main` (web UI: require PR + required
+      checks, block force-push)
+- [x] `ci.yml` runs frontend build + backend tests on PRs to `main`/`develop`
+      and on pushes to `develop`
+- [x] Release versioning: images tagged `<version>`/`<sha>`/`latest`;
+      `bump-develop` advances `develop` to the next `-SNAPSHOT` (ADR-009)
 
 ---
 
@@ -138,10 +152,11 @@ portfolio-infrastructure
 - [x] Deployment credentials protected
 - [x] Document secret handling
 
-Deployment model: GitHub-hosted runners build and test; a self-hosted runner on
-the VM pulls the images and runs `docker compose up -d`. Only `80`/`443` are
-exposed on the VM. Implemented in `.github/workflows/deploy.yml` (ADR-005,
-ADR-007).
+Deployment model: `ci.yml` validates pull requests (frontend build + backend
+tests); `deploy.yml` runs on push to `main` — GitHub-hosted runners build,
+test, and push images, then a self-hosted runner on the VM pulls them and runs
+`docker compose up -d`. Only `80`/`443` are exposed on the VM. Implemented in
+`.github/workflows/` (ADR-005, ADR-007).
 
 ---
 

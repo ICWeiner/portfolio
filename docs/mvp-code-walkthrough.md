@@ -130,19 +130,29 @@ Three services on one internal `edge` network; only Traefik publishes ports
 
 ## CI/CD (`deploy.yml`)
 
-One workflow, three jobs:
+One workflow, four jobs:
 
 1. **frontend** (GitHub-hosted) — `npm ci`, `npm run build`, push image to GHCR
-   tagged `SHA` + `latest`.
-2. **backend** (GitHub-hosted) — `./mvnw test`, push image tagged `SHA` +
-   `latest`.
-3. **deploy** (self-hosted runner on the VM, `needs` both) — sync repo
+   tagged `<version>` + `SHA` + `latest`. `<version>` comes from
+   `package.json` with `-SNAPSHOT` stripped.
+2. **backend** (GitHub-hosted) — `./mvnw test`, push image tagged `<version>` +
+   `SHA` + `latest`. `<version>` comes from `pom.xml` `<revision>`; the image is
+   built with that version via the `REVISION` build arg, so `/api/v1/ping`
+   reports the release version.
+3. **bump-develop** (GitHub-hosted, `needs` both) — checks out `develop`,
+   computes the next snapshot (strip `-SNAPSHOT`, bump the patch, re-add
+   `-SNAPSHOT`: `0.0.1-SNAPSHOT` → `0.0.2-SNAPSHOT`), updates
+   `pom.xml`/`package.json`, and pushes the commit to `develop`.
+4. **deploy** (self-hosted runner on the VM, `needs` both) — sync repo
    `infrastructure/` to `/opt/portfolio/infrastructure`, `docker compose pull &&
 up -d` with `IMAGE_TAG=<SHA>`, then verify.
 
 Guards: runs on push to `main` + manual dispatch; `packages: write` permission
 lets `GITHUB_TOKEN` push to GHCR (ADR-007); concurrency group per ref with
 `cancel-in-progress` (last push wins).
+
+`bump-develop` pushes directly to `develop` — allowed, since only `main` is
+protected.
 
 Verification details:
 

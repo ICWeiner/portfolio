@@ -185,6 +185,10 @@ sequenceDiagram
   installed on the Portfolio Host VM (see ADR-005).
 - The runner connects outbound to GitHub, so no inbound ports are required on
   the VM beyond `80`/`443`.
+- **Branch model:** `main` is protected (releases ship via PR, ADR-008);
+  `develop` is the integration branch with direct pushes allowed. `ci.yml`
+  runs the frontend build and backend tests on PRs to `main`/`develop` and on
+  pushes to `develop`; `deploy.yml` runs only on push to `main`.
 - Flow on push to `main`:
 
 ```mermaid
@@ -202,6 +206,13 @@ flowchart LR
   same compose stack on the VM.
 - Images are tagged with the git SHA and pushed to GHCR (GitHub Container
   Registry), so every deploy is traceable to a commit.
+- **Versioning:** release versions are derived from the current snapshot. On
+  push to `main`, CI strips `-SNAPSHOT` (e.g. `0.0.1-SNAPSHOT` → `0.0.1`) and
+  tags images with that release version, the git SHA, and `latest`. The
+  backend image is built with that version via `REVISION`, so `/api/v1/ping`
+  reports the release version. A `bump-develop` job then advances `develop` to
+  the next snapshot (`0.0.2-SNAPSHOT`). The source of truth is
+  `backend/pom.xml` (`<revision>`) and `frontend/package.json` (`version`).
 - The deploy job runs on the self-hosted runner: `docker compose pull`, then
   `docker compose up -d`, followed by a health check against the API.
 - The stack runs from `/opt/portfolio/infrastructure` on the VM. Config lives in

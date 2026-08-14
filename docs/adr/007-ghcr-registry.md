@@ -10,14 +10,16 @@ traceability of any running image back to a commit.
 **Decision:**
 Use GitHub Container Registry (GHCR) as the image registry. Images are pushed
 from GitHub Actions using the built-in `GITHUB_TOKEN` (no separate
-credentials) and tagged with the git SHA, plus `latest` for convenience. The
-deploy workflow passes the SHA as `IMAGE_TAG` to `docker compose`.
+credentials) and tagged with the release version, the git SHA, and `latest`
+for convenience (versioning scheme in ADR-009). The deploy workflow passes
+the SHA as `IMAGE_TAG` to `docker compose`.
 
 **Consequences:**
 
 - No external registry account or credential to manage; auth reuses GitHub's
   token with `packages: write` scope.
-- Every deployed image is traceable to a commit; rollback = redeploy a
-  previous SHA.
-- Private by default; visible to collaborators only.
+- Every deployed image is traceable to a version and a commit; rollback =
+  redeploy a previous version or SHA tag.
+- Package visibility follows the repository: public repo → public images, so
+  the VM can `docker compose pull` without credentials.
 - Images are coupled to GitHub as the CI provider.
