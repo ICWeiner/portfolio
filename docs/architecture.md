@@ -185,6 +185,10 @@ sequenceDiagram
   installed on the Portfolio Host VM (see ADR-005).
 - The runner connects outbound to GitHub, so no inbound ports are required on
   the VM beyond `80`/`443`.
+- **Branch model:** `main` is protected (releases ship via PR, ADR-008);
+  `develop` is the integration branch with direct pushes allowed. `ci.yml`
+  runs the frontend build and backend tests on PRs to `main`/`develop` and on
+  pushes to `develop`; `deploy.yml` runs only on push to `main`.
 - Flow on push to `main`:
 
 ```mermaid
