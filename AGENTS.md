@@ -45,6 +45,11 @@ starter and are accurate (`astro dev --background` is real in Astro 7).
   the VM each run, so VM config always mirrors the repo; `.env` and
   `traefik/certificates/` persist only on the VM. Compose defaults `IMAGE_TAG`
   to `latest`; CI overrides it with the git SHA.
+- **Versioning:** on push to `main`, CI strips `-SNAPSHOT` to get the release
+  version (from `backend/pom.xml` `<revision>` and `frontend/package.json`
+  `version`), tags images `<version>`/`<sha>`/`latest`, builds the backend with
+  `REVISION=<version>`, then bumps `develop` to the next `-SNAPSHOT`. Bump the
+  `<revision>`/`version` fields when cutting a release.
 
 ## Conventions
 

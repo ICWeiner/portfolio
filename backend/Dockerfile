@@ -1,15 +1,16 @@
 # syntax=docker/dockerfile:1
 FROM maven:3.9-eclipse-temurin-21-alpine AS build
+ARG REVISION=0.0.1-SNAPSHOT
 WORKDIR /app
 COPY pom.xml .
 RUN mvn -B -q dependency:go-offline
 COPY src ./src
-RUN mvn -B -q package -DskipTests
+RUN mvn -B -q package -DskipTests -Drevision=$REVISION
 
 FROM eclipse-temurin:21-jre-alpine
 RUN addgroup -S app && adduser -S app -G app
 WORKDIR /app
-COPY --from=build /app/target/portfolio-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/app.jar app.jar
 USER app
 EXPOSE 8080
 ENV SPRING_PROFILES_ACTIVE=prod
